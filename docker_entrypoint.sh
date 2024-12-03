@@ -8,7 +8,7 @@ OUTPUT_DIR=/output
 TIFF_DIR=$OUTPUT_DIR/tiff
 # RUn gmldem2tif
 cd /app/gmldem2tif
-bundle exec ruby gmldem2tif.rb -n `nproc` $INPUT_DIR $TIFF_DIR
+bundle exec ruby gmldem2tif.rb -v -n `nproc` $INPUT_DIR $TIFF_DIR
 cd /output
 # Create vrt file
 gdalbuildvrt -a_srs EPSG:4326 -hidenodata all.vrt $TIFF_DIR/*.tif
@@ -31,7 +31,7 @@ cp terrarium.mbtiles $OUTPUT_DIR
 # Create vrt file with nodata
 gdalbuildvrt -a_srs EPSG:4326 -srcnodata 9999 all_with_nodata.vrt $TIFF_DIR/*.tif
 # Create tif file with nodata
-gdal_translate -co compress=lzw -co BIGTIFF=YES -of GTiff all_with_nodata.vrt all_with_nodata.tiff
+gdal_translate -co compress=lzw -co BIGTIFF=YES -of GTiff -a_nodata 9999 all_with_nodata.vrt all_with_nodata.tiff
 # Run rio-gsidem
 rio gsidem --format png --max-z 18 --min-z 5 -j `nproc` all_with_nodata.tiff gsidem.mbtiles
 # Unarchive mbtiles
