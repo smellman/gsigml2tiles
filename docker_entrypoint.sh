@@ -24,14 +24,10 @@ gdal_calc.py --co="COMPRESS=LZW" --co="BIGTIFF=YES" --type=Float32 -A all.tiff -
 rio rgbify -b -10000 -i 0.1 --format png --max-z $MAX_ZOOM --min-z $MIN_ZOOM -j `nproc` all_calc.tiff mapbox.mbtiles
 # Unarchive mbtiles
 mb-util --image_format=png mapbox.mbtiles $OUTPUT_DIR/mapbox
-# copy mapbox.mbtiles
-cp mapbox.mbtiles $OUTPUT_DIR
 # Run rio-termarium
 rio terrarium --format png --max-z $MAX_ZOOM --min-z $MIN_ZOOM -j `nproc` all_calc.tiff terrarium.mbtiles
 # Unarchive mbtiles
 mb-util --image_format=png terrarium.mbtiles $OUTPUT_DIR/terrarium
-# copy terrarium.mbtiles
-cp terrarium.mbtiles $OUTPUT_DIR
 # Create vrt file with nodata
 gdalbuildvrt -a_srs EPSG:4326 -srcnodata 9999 all_with_nodata.vrt $TIFF_DIR/*.tif
 # Create tif file with nodata
@@ -40,6 +36,3 @@ gdal_translate -co compress=lzw -co BIGTIFF=YES -of GTiff -a_nodata 9999 all_wit
 rio gsidem --format png --max-z $MAX_ZOOM --min-z $MIN_ZOOM -j `nproc` all_with_nodata.tiff gsidem.mbtiles
 # Unarchive mbtiles
 mb-util --image_format=png gsidem.mbtiles $OUTPUT_DIR/gsidem
-# copy gsidem.mbtiles
-cp gsidem.mbtiles $OUTPUT_DIR
-
