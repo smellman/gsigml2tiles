@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install -y \
     git \
     gdal-bin \
     python3-gdal \
+    python3-scipy \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -39,6 +40,11 @@ RUN git clone https://github.com/smellman/rio-terrarium.git \
 RUN git clone https://github.com/smellman/rio-gsidem.git \
     && cd rio-gsidem \
     && pip3 install -e '.[test]' --break-system-packages
+
+RUN git clone https://github.com/qchizu/gdal2NPtiles.git \
+    && cd gdal2NPtiles \
+    && cp gdal2NPtiles.py /usr/local/bin/ \
+    && chmod +x /usr/local/bin/gdal2NPtiles.py
 
 COPY docker_entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker_entrypoint.sh
