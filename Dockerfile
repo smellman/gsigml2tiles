@@ -37,10 +37,6 @@ RUN git clone https://github.com/smellman/rio-terrarium.git \
     && cd rio-terrarium \
     && pip3 install -e '.[test]' --break-system-packages
 
-RUN git clone https://github.com/smellman/rio-gsidem.git \
-    && cd rio-gsidem \
-    && pip3 install -e '.[test]' --break-system-packages
-
 RUN git clone https://github.com/qchizu/gdal2NPtiles.git \
     && cd gdal2NPtiles \
     && cp gdal2NPtiles.py /usr/local/bin/ \
