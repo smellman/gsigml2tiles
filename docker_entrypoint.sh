@@ -53,13 +53,13 @@ if [ -f "$OUTPUT_DIR/all_with_nodata.tiff" ]; then
     echo "all_with_nodata.tiff exists. Skipping geotiff processing."
 else
     # Create vrt file with nodata
-    gdalbuildvrt -a_srs EPSG:4326 -srcnodata 9999 all_with_nodata.vrt $TIFF_DIR/*.tif
+    gdalbuildvrt -a_srs EPSG:4326 -srcnodata "-9999" all_with_nodata.vrt $TIFF_DIR/*.tif
     # Create tif file with nodata
-    gdal_translate -co compress=lzw -co BIGTIFF=YES -of GTiff -a_nodata 9999 all_with_nodata.vrt all_with_nodata.tiff
+    gdal_translate -co compress=lzw -co BIGTIFF=YES -of GTiff -a_nodata "-9999" all_with_nodata.vrt all_with_nodata.tiff
 fi
 # Skip create gsidem if gsidem directory exist
 if [ -d "$OUTPUT_DIR/gsidem" ]; then
     echo "gsidem directory exists. Skipping gdal2NPTiles processing."
 else
-    python3 /usr/local/bin/gdal2NPtiles.py --numerical --processes=$(nproc) --xyz -a 9999 -z 5-17 all_with_nodata.tiff $OUTPUT_DIR/gsidem
+    python3 /usr/local/bin/gdal2NPtiles.py --numerical --processes=$(nproc) --xyz -a "-9999" -z 5-17 all_with_nodata.tiff $OUTPUT_DIR/gsidem
 fi

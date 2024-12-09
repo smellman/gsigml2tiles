@@ -37,8 +37,9 @@ RUN git clone https://github.com/smellman/rio-terrarium.git \
     && cd rio-terrarium \
     && pip3 install -e '.[test]' --break-system-packages
 
-RUN git clone https://github.com/qchizu/gdal2NPtiles.git \
+RUN git clone https://github.com/smellman/gdal2NPtiles.git \
     && cd gdal2NPtiles \
+    && git switch gsi-compatible \
     && cp gdal2NPtiles.py /usr/local/bin/ \
     && chmod +x /usr/local/bin/gdal2NPtiles.py
 
