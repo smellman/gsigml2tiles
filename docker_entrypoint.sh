@@ -24,11 +24,11 @@ if [ -f "$OUTPUT_DIR/all_calc.tiff" ]; then
     echo "all_calc.tiff exists. Skipping geotiff processing."
 else
     # Create vrt file
-    gdalbuildvrt -a_srs EPSG:4326 -hidenodata all.vrt $TIFF_DIR/*.tif
+    gdalbuildvrt -a_srs EPSG:4326 -srcnodata "-9999" all.vrt $TIFF_DIR/*.tif
     # Create tif file
-    gdal_translate -co compress=lzw -co BIGTIFF=YES -of GTiff all.vrt all.tiff
+    gdal_translate -co compress=lzw -co BIGTIFF=YES -a_nodata "-9999" -of GTiff all.vrt all.tiff
     # Calculate tif file
-    gdal_calc.py --co="COMPRESS=LZW" --co="BIGTIFF=YES" --type=Float32 -A all.tiff --outfile=all_calc.tiff --calc="A*(A>0)" --NoDataValue=0
+    gdal_calc.py --co="COMPRESS=LZW" --co="BIGTIFF=YES" --type=Float32 -A all.tiff --outfile=all_calc.tiff --calc="0*(A==-9999) + A*(A!=-9999)" --NoDataValue=-9999
 fi
 # Skip rio-rgbify if mapbox.mbtiles exist
 if [ -f "$OUTPUT_DIR/mapbox.mbtiles" ]; then
