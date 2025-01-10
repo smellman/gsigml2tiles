@@ -40,7 +40,7 @@ else
     mb-util --image_format=png mapbox.mbtiles $OUTPUT_DIR/mapbox
 fi
 # Skip rio-terrarium if terrarium.mbtiles exist
-if [ -f "$OUTPUT_DIR/mapbox.mbtiles" ]; then
+if [ -f "$OUTPUT_DIR/terrarium.mbtiles" ]; then
     echo "terrarium.mbtiles exists. Skipping rio-terrarium processing."
 else
     # Run rio-terrarium
