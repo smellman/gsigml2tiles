@@ -28,7 +28,7 @@ else
     # Create tif file
     gdal_translate -co compress=lzw -co BIGTIFF=YES -a_nodata "-9999" -of GTiff all.vrt all.tiff
     # Calculate tif file
-    gdal_calc.py --co="COMPRESS=LZW" --co="BIGTIFF=YES" --type=Float32 -A all.tiff --outfile=all_calc.tiff --calc="0*(A==-9999) + A*(A!=-9999)" --NoDataValue=-9999
+    gdal_calc.py --co="COMPRESS=LZW" --co="BIGTIFF=YES" --type=Float32 -A all.tiff --outfile=all_calc.tiff --calc="0*(A<=-9998) + A*(A>-9998)" --NoDataValue=-9999
 fi
 # Skip rio-rgbify if mapbox.mbtiles exist
 if [ -f "$OUTPUT_DIR/mapbox.mbtiles" ]; then
