@@ -20,8 +20,8 @@ else
 fi
 cd $OUTPUT_DIR
 # Skip create tiff file if all_calc.tiff exist
-if [ -f "$OUTPUT_DIR/all.tiff" ]; then
-    echo "all.tiff exists. Skipping geotiff processing."
+if [ -f "$OUTPUT_DIR/all_calc.tiff" ]; then
+    echo "all_calc.tiff exists. Skipping geotiff processing."
 else
     # Create vrt file
     gdalbuildvrt -a_srs EPSG:4326 -srcnodata "-9999" all.vrt $TIFF_DIR/*.tif
