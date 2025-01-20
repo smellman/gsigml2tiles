@@ -25,15 +25,17 @@ if [ -f "$OUTPUT_DIR/all.tiff" ]; then
 else
     # Create vrt file
     gdalbuildvrt -a_srs EPSG:4326 -srcnodata "-9999" all.vrt $TIFF_DIR/*.tif
-    # Create tif file with fill nodata value to 0
-    gdal_translate -co compress=lzw -co BIGTIFF=YES -a_nodata "0" -of GTiff all.vrt all.tiff
+    # Create tif file with fill nodata value
+    gdal_translate -co compress=lzw -co BIGTIFF=YES -a_nodata "-9999" -of GTiff all.vrt all.tiff
+    # Calculate and filter nodata value
+    gdal_calc.py -A all.tiff --outfile=all_calc.tiff --calc="A*(A!=A) + 0*(A==A)" --type=Float32 --co="COMPRESS=LZW"
 fi
 # Skip rio-rgbify if mapbox.mbtiles exist
 if [ -f "$OUTPUT_DIR/mapbox.mbtiles" ]; then
     echo "mapbox.mbtiles exists. Skipping rio-rgbify processing."
 else
     # Run rio-rgbify
-    rio rgbify -b -10000 -i 0.1 --format png --max-z $MAX_ZOOM --min-z $MIN_ZOOM -j `nproc` all.tiff mapbox.mbtiles
+    rio rgbify -b -10000 -i 0.1 --format png --max-z $MAX_ZOOM --min-z $MIN_ZOOM -j `nproc` all_calc.tiff mapbox.mbtiles
     # Unarchive mbtiles
     mb-util --image_format=png mapbox.mbtiles $OUTPUT_DIR/mapbox
 fi
