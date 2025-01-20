@@ -29,7 +29,7 @@ else
     gdalbuildvrt -a_srs EPSG:4326 -srcnodata "-9999" all.vrt $TIFF_DIR/*.tif
     # Create tif file with fill nodata value
     gdal_translate -co compress=lzw -co BIGTIFF=YES -a_nodata "-9999" -of GTiff all.vrt all.tiff
-    # Calculate and filter nodata value
+    # Calculate and filter nodata value # following command does't run on debian's gdal so run on macOS and copy it.
     gdal_calc.py -A all.tiff --outfile=all_calc.tiff --calc="where(A==-9999, 0, A)" --NoDataValue=None --type=Float32 --co="COMPRESS=LZW"
 fi
 # Skip rio-rgbify if mapbox.mbtiles exist
